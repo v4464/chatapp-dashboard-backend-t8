@@ -1,0 +1,85 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e5ddd5;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#userList, #chatbox, #userInput {
+    width: 90%;
+    max-width: 600px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #075e54;
+    margin-bottom: 20px;
+}
+
+#userList h3 {
+    color: #128c7e;
+    margin-bottom: 10px;
+}
+
+#userList div {
+    padding: 5px 0;
+    border-bottom: 1px solid #e5ddd5;
+}
+
+#chatbox {
+    height: 400px;
+    overflow-y: auto;
+    padding-bottom: 50px;
+    margin-bottom: 10px;
+    background-color: #fafafa;
+}
+
+#chatbox div {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    background-color: #dcf8c6;
+}
+
+#userInput {
+    display: flex;
+    align-items: center;
+}
+
+#messageInput {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 10px;
+    outline: none;
+    font-size: 14px;
+}
+
+#sendButton {
+    background-color: #25d366;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#sendButton:hover {
+    background-color: #128c7e;
+}
+
+@media screen and (max-width: 600px) {
+    #userList, #chatbox, #userInput {
+        width: 100%;
+    }
+}

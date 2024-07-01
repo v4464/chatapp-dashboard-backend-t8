@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+    <link rel="stylesheet" href="/css/chatapp.css">
+</head>
+<body>
+    <h2>Chat App</h2>
+    <div id="userList">
+    </div>
+    <div id="chatbox">
+    </div>
+    <div id="userInput">
+        <input type="text" id="messageInput" placeholder="Type your message here..." />
+        <button id="sendButton">Send</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please login first');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Fetch and display logged-in users
+            const fetchUsers = async () => {
+                try {
+                    const response = await axios.get('http://localhost:5000/user/loggedin', {
+                        headers: { Authorization: token }
+                    });
+                    const users = response.data.users;
+                    const userListDiv = document.getElementById('userList');
+                    if (users.length > 1) {
+                        userListDiv.innerHTML = '<h3>Logged in users:</h3>';
+                        users.forEach(user => {
+                            const userDiv = document.createElement('div');
+                            userDiv.textContent = user.name;
+                            userListDiv.appendChild(userDiv);
+                        });
+                    }
+                } catch (err) {
+                    console.error('Error fetching users:', err);
+                }
+            };
+
+            fetchUsers();
+
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+
+            sendButton.addEventListener('click', async () => {
+                const message = messageInput.value;
+                if (message.trim() === '') {
+                    return;
+                }
+                try {
+                    await axios.post('http://localhost:5000/chat/message', { message }, {
+                        headers: { Authorization: token }
+                    });
+                    messageInput.value = '';
+                    fetchMessages(); // Refresh messages after sending a new one
+                } catch (err) {
+                    console.log('Error sending message:', err);
+                }
+            });
+
+            // Fetch and display chat messages
+            const fetchMessages = async () => {
+                try {
+                    const response = await axios.get('http://localhost:5000/chat/messages', {
+                        headers: { Authorization: token }
+                    });
+                    const messages = response.data.messages;
+                    const chatbox = document.getElementById('chatbox');
+                    chatbox.innerHTML = '';
+                    messages.forEach(msg => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.textContent = `${msg.user.name}: ${msg.content}`;
+                        chatbox.appendChild(messageDiv);
+                    });
+                } catch (err) {
+                    console.error('Error fetching messages:', err);
+                }
+            };
+
+            fetchMessages();
+
+            setInterval(fetchMessages, 3000); // Refresh messages every 3 seconds
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>
